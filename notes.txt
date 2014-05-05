@@ -1,3 +1,10 @@
+-For the purposes of training, a function will accept a list argument.
+This list argument will be a list of emails from the 'emails' dictionary
+entry below. We won't have to worry about generating term counts until we
+do the classifier steps (see the B* and M* parts below which start out
+as 0's in the email parsing step).
+
+
 This should be the format of the dictionary returned from the parser
 module's primary function.
 
@@ -11,13 +18,17 @@ module's primary function.
                  },
   'docCount' : 00,
   'termCounts' : {
-                   t1 : {
-                          'Social' : [B*, M*],
-                          'Shopping' : [B*, M*],
-                          'Spam' : [B*, M*],
-                          'Other' : [B*, M*]
-                        }
-                   t2 : { ... }
+                   t1 : [
+                          // You should initialize these to 0's - the B and M
+                          // are just there to let you know what these mean.
+                          [B*, M*], // SOCIAL_INDEX
+                          [B*, M*], // SHOPPING_INDEX
+                          [B*, M*], // SPAM_INDEX
+                          [B*, M*], // OTHER_INDEX
+                        ]
+                   t2 : [ ... ],
+                   ...
+                   t(n) : [ ... ]
                  },
   'emails' : [ (10 lists in here, one for each group in the 10-fold)
                 [
