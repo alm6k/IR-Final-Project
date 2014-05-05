@@ -19,3 +19,7 @@ IR Final Project
   - the document set will be segmented into 10 distinct groups; alternating between each of the 10 groups, a single group will be used for testing the classifier trained with the other 9 groups (by calling the classifier's method with the other 9 groups merged as one).
     - For each of these iterations, the percentage of documents that were correctly classified will be remembered
     - After all 10 groups have been used to test, the percentages will be averaged to produce the overall effectiveness of the classifier
+  - I think the Rand Index value could be calculated as well
+    - After all classifications are made, do it across all of the documents;
+    - It's a pair-wise comparison/count followed by a single calculation.
+  - This way, each of us can do a Classifier and an Evaluator
