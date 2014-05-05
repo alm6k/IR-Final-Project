@@ -2,6 +2,10 @@ IR Final Project
 ================
 
 - E-mail classification system for final Information Retrieval project.
+- First thing, need to figure out how to get the emails downloaded and separated into the right groups
+- Then, build the classifiers
+- Then, build the evaluators
+- Then, make the presentation
 - As a proof-of-concept design, we will choose the 4 categories corresponding to the types of emails used in the test set:
   - Social
   - Shopping
