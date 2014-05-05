@@ -1,0 +1,46 @@
+This should be the format of the dictionary returned from the parser
+module's primary function.
+
+{
+  'vocabSize' : 00,
+  'classCount' : {
+                   'Social' : 00,
+                   'Shopping' : 00,
+                   'Spam' : 00,
+                   'Other' : 00
+                 },
+  'docCount' : 00,
+  'termCounts' : {
+                   t1 : {
+                          'Social' : [B*, M*],
+                          'Shopping' : [B*, M*],
+                          'Spam' : [B*, M*],
+                          'Other' : [B*, M*]
+                        }
+                   t2 : { ... }
+                 },
+  'emails' : [ (10 lists in here, one for each group in the 10-fold)
+                [
+                    {
+                        'terms' : ['this', 'contains', 'the', 'email\'s', 'terms'],
+                        'truthCategory' : 0,
+                        'bernoulliCategory' : 0,
+                        'multinomialCategory' : 0
+                    }, // there is a dictionary for each email in this group
+                    ...
+                    { ... }
+                ],
+                ...
+                [ ... ]
+             ]
+}
+
+
+
+
+
+*** Starred stuff ***
+B* (Bernoulli) - this is the number of documents in the classification that contain
+the given term.
+
+M* (Multinomial) - number of times that the term appears in all documents in the given classification.
