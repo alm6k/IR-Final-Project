@@ -218,6 +218,8 @@ def parse_emails():
                     'multinomialCategory' : -1 \
                 } \
             )
+    
+    data_from_parsing['vocabSize'] = len(data_from_parsing['termCounts'])
 
     if debug_mode == True:
         print("*** Raw email term lists: ")
@@ -228,6 +230,8 @@ def parse_emails():
         print("\n*** Terms found: ")
         for key in sorted(data_from_parsing['termCounts']):
             print(key)
+
+        print("\n*** Number of terms found (vocabSize): " + str(data_from_parsing['vocabSize']))
 
         print("\n*** Doc count: " + str(data_from_parsing['docCount']))
 
