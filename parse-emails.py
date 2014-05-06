@@ -47,7 +47,7 @@ def get_charsets(msg):
 
 
 def handle_error(errmsg, emailmsg,cs):
-    if (False):
+    if debug_mode:
         print("")
         print(errmsg)
         print("This error occurred while decoding with ",cs," charset.")
@@ -62,7 +62,7 @@ def get_text_only(soup):
     from the text content of a BeautifulSoup object. """
 
     v = soup.string     # try to get string between open and close tags
-    if v==None:         # if None, then recursively do the same for each child
+    if v == None:         # if None, then recursively do the same for each child
         c = soup.contents
         resulttext = ''
         for tag in c:
@@ -103,7 +103,7 @@ def separate_words(text):
     splitterRE = re.compile('\\W*')
     words = splitterRE.split(text)  # split text by occurrences of the RE
     # convert list entries to lower case (via list comprehension format)
-    #words = [s.lower() for s in words]
+    #words = [s.lower() for s in words] # ERR: sometimes throws an exception
     for s in words:
         try:
             s = str(s.lower())
@@ -123,44 +123,42 @@ def separate_words(text):
 
 def get_email_text(msg):
     body = None
-    #Walk through the parts of the email to find the text body.
+    # Search through all parts of the email to find relevant text 
     if msg.is_multipart():
         for part in msg.walk():
-
-            # If part is multipart, walk through the subparts.
+            # Check each part of the message for text (if there are several)
             if part.is_multipart():
-
                 for subpart in part.walk():
                     if subpart.get_content_type() in acceptable_content_types:
                         # Get the subpart payload (i.e the message body)
                         body = subpart.get_payload(decode=True)
                         #charset = subpart.get_charset()
-
-            # Part isn't multipart so get the email body
             elif part.get_content_type() in acceptable_content_types:
-                body = part.get_payload(decode=True)
-                #charset = part.get_charset()
-
-    # If this isn't a multi-part message then get the payload (i.e the message body)
+                body = part.get_payload(decode=True) 
+ 
     elif msg.get_content_type() in acceptable_content_types:
         body = msg.get_payload(decode=True)
 
-    # Try different encodings listed in the Content-Type header until you find the
-    # right one that will decode the email text
-    for charset in get_charsets(msg):
-        try:
-            if (body is not None):
+    if body is None:
+        body = ""
+    else:
+        # Try different encodings listed in the Content-Type header until you
+        # find the right one that will decode the email text
+        for charset in get_charsets(msg):
+            try:
                 body = body.decode(charset)
                 break
-            else:
-                body = ""
-        except UnicodeEncodeError as e:
-            handle_error("UnicodeEncodeError: encountered.",msg,charset)
-        except UnicodeDecodeError as e:
-            handle_error("UnicodeDecodeError: encountered.",msg,charset)
-        except AttributeError as e:
-            handle_error("AttributeError: encountered" ,msg,charset)
-    return msg['subject'] + " " + body
+            except UnicodeEncodeError as e:
+                handle_error("UnicodeEncodeError!",msg,charset)
+            except UnicodeDecodeError as e:
+                handle_error("UnicodeDecodeError!",msg,charset)
+            except AttributeError as e:
+                handle_error("AttributeError!" ,msg,charset)
+
+    if msg['subject'] is None:
+        return body
+    else:
+        return msg['subject'] + " " + body
 #END get_email_text()
 
 
