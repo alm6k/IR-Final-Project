@@ -3,8 +3,10 @@
 # this file will parse the emails out
 
 from bs4 import *
+from os import listdir
 import mailbox
 import re
+import unicodedata
 
 debug_mode = False # Set to true when running this module by itself
 
@@ -15,9 +17,7 @@ SPAM_INDEX      = 2
 OTHER_INDEX     = 3
 
 # Files to parse
-MBOX_FILES = [ \
-                ('data/Shopping1.mbox', SHOPPING_INDEX) \
-             ]
+MBOX_FILES = []
 
 # Which content types we should attempt to parse meaningful text out of
 acceptable_content_types = ('text/plain', 'text/html')
@@ -47,12 +47,13 @@ def get_charsets(msg):
 
 
 def handle_error(errmsg, emailmsg,cs):
-    print("")
-    print(errmsg)
-    print("This error occurred while decoding with ",cs," charset.")
-    print("These charsets were found in the one email.",get_charsets(emailmsg))
-    print("This is the subject:",emailmsg['subject'])
-    print("This is the sender:",emailmsg['From'])
+    if (False):
+        print("")
+        print(errmsg)
+        print("This error occurred while decoding with ",cs," charset.")
+        print("These charsets were found in the one email.",get_charsets(emailmsg))
+        print("This is the subject:",emailmsg['subject'])
+        print("This is the sender:",emailmsg['From'])
 #END handle_error()
 
 
@@ -122,17 +123,17 @@ def separate_words(text):
 
 def get_email_text(msg):
     body = None
-    #Walk through the parts of the email to find the text body.    
-    if msg.is_multipart():    
+    #Walk through the parts of the email to find the text body.
+    if msg.is_multipart():
         for part in msg.walk():
 
-            # If part is multipart, walk through the subparts.            
-            if part.is_multipart(): 
+            # If part is multipart, walk through the subparts.
+            if part.is_multipart():
 
                 for subpart in part.walk():
                     if subpart.get_content_type() in acceptable_content_types:
                         # Get the subpart payload (i.e the message body)
-                        body = subpart.get_payload(decode=True) 
+                        body = subpart.get_payload(decode=True)
                         #charset = subpart.get_charset()
 
             # Part isn't multipart so get the email body
@@ -142,24 +143,24 @@ def get_email_text(msg):
 
     # If this isn't a multi-part message then get the payload (i.e the message body)
     elif msg.get_content_type() in acceptable_content_types:
-        body = msg.get_payload(decode=True) 
+        body = msg.get_payload(decode=True)
 
-    # No checking done to match the charset with the correct part. 
+    # Try different encodings listed in the Content-Type header until you find the
+    # right one that will decode the email text
     for charset in get_charsets(msg):
         try:
             if (body is not None):
                 body = body.decode(charset)
+                break
             else:
                 body = ""
+        except UnicodeEncodeError as e:
+            handle_error("UnicodeEncodeError: encountered.",msg,charset)
         except UnicodeDecodeError as e:
-            print("HANDLING ERROR:")
-            print(e)
             handle_error("UnicodeDecodeError: encountered.",msg,charset)
         except AttributeError as e:
-            print("HANDLING ERROR:")
-            print(e)
             handle_error("AttributeError: encountered" ,msg,charset)
-    return body    
+    return body
 #END get_email_text()
 
 
@@ -168,7 +169,16 @@ def parse_emails():
     given a category for each one. """
 
     global data_from_parsing
-    
+
+    # Add all mbox files (and their corresponding category) to MBOX_FILES
+    categories = [("data/categories/other/", OTHER_INDEX), \
+                  ("data/categories/shopping/", SHOPPING_INDEX), \
+                  ("data/categories/social/", SOCIAL_INDEX), \
+                  ("data/categories/spam/", SPAM_INDEX)]
+    for dirpath, category in categories:
+        for filename in listdir(dirpath):
+            MBOX_FILES.append((dirpath + filename, category))
+
     # Read in stop_words from a file into the stop_words set
     stop_txt_file = open("data/stopwords.list", "r")
     for line in stop_txt_file:
@@ -187,8 +197,8 @@ def parse_emails():
             email_text = "<html><body>" + get_email_text(msg) + "</body></html>"
 
             # Parse and remove garbage
-            soup = BeautifulSoup(email_text) 
-            [s.extract() for s in soup('script')] # Remove 'script' elements 
+            soup = BeautifulSoup(email_text)
+            [s.extract() for s in soup('script')] # Remove 'script' elements
             [s.extract() for s in soup('style')]  # Remove 'style' elements
 
             # Get text from the cleaned up XML
@@ -199,7 +209,7 @@ def parse_emails():
             for term in email_text:
                 if term not in data_from_parsing['termCounts']:
                     data_from_parsing['termCounts'][term] = [ [0,0], [0,0], [0,0], [0,0] ]
-            
+
             data_from_parsing['emails'].append( \
                 { \
                     'terms' : email_text, \
