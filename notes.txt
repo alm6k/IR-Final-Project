@@ -22,25 +22,21 @@ These are the global variables to be used in our system:
                         [B*, M*], // SOCIAL_INDEX
                         [B*, M*], // SHOPPING_INDEX
                         [B*, M*], // SPAM_INDEX
-                        [B*, M*], // OTHER_INDEX
+                        [B*, M*]  // OTHER_INDEX
                       ]
                  t2 : [ ... ],
                  ...
                  t(n) : [ ... ]
                },
-'emails' : [ (10 lists in here, one for each group in the 10-fold)
-              [
-                  {
-                      'terms' : ['this', 'contains', 'the', 'email\'s', 'terms'],
-                      'truthCategory' : 0,
-                      'bernoulliCategory' : 0,
-                      'multinomialCategory' : 0
-                  }, // there is a dictionary for each email in this group
-                  ...
-                  { ... }
-              ],
-              ...
-              [ ... ]
+'emails' : [
+               {
+                   'terms' : ['this', 'contains', 'the', 'email\'s', 'terms'],
+                   'truthCategory' : 0,
+                   'bernoulliCategory' : 0,
+                   'multinomialCategory' : 0
+               }, // there is a dictionary for each email in this group
+               ...
+               { ... }
            ]
 
 
