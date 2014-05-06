@@ -6,15 +6,36 @@ from bs4 import *
 import mailbox
 import re
 
+debug_mode = False # Set to true when running this module by itself
+
 # For readability when accessing lists
 SOCIAL_INDEX    = 0
 SHOPPING_INDEX  = 1
 SPAM_INDEX      = 2
 OTHER_INDEX     = 3
 
+# Files to parse
+MBOX_FILES = [ \
+                ('data/Shopping1.mbox', SHOPPING_INDEX) \
+             ]
+
+# Which content types we should attempt to parse meaningful text out of
+acceptable_content_types = ('text/plain', 'text/html')
+
+# Dictionary returned from parse_emails, providing useful information
+# used in later steps in the program (classifiers, etc.)
+data_from_parsing = \
+{
+  'vocabSize' : 0, \
+  'classCount' : [0,0,0,0], \
+  'docCount' : 0, \
+  'termCounts' : {}, \
+  'emails' : [] \
+}
+
+# List of stop_words to be stripped from the email content
 stop_words = set()
-doc_count = 0
-term_freq = {}
+
 
 def get_charsets(msg):
     charsets = set({})
@@ -22,6 +43,7 @@ def get_charsets(msg):
         if c is not None:
             charsets.update([c])
     return charsets
+#END get_charsets()
 
 
 def handle_error(errmsg, emailmsg,cs):
@@ -31,6 +53,7 @@ def handle_error(errmsg, emailmsg,cs):
     print("These charsets were found in the one email.",get_charsets(emailmsg))
     print("This is the subject:",emailmsg['subject'])
     print("This is the sender:",emailmsg['From'])
+#END handle_error()
 
 
 def get_text_only(soup):
@@ -107,18 +130,18 @@ def get_email_text(msg):
             if part.is_multipart(): 
 
                 for subpart in part.walk():
-                    if subpart.get_content_type() == 'text/plain':
+                    if subpart.get_content_type() in acceptable_content_types:
                         # Get the subpart payload (i.e the message body)
                         body = subpart.get_payload(decode=True) 
                         #charset = subpart.get_charset()
 
             # Part isn't multipart so get the email body
-            elif part.get_content_type() == 'text/plain':
+            elif part.get_content_type() in acceptable_content_types:
                 body = part.get_payload(decode=True)
                 #charset = part.get_charset()
 
     # If this isn't a multi-part message then get the payload (i.e the message body)
-    elif msg.get_content_type() == 'text/plain':
+    elif msg.get_content_type() in acceptable_content_types:
         body = msg.get_payload(decode=True) 
 
     # No checking done to match the charset with the correct part. 
@@ -140,43 +163,71 @@ def get_email_text(msg):
 #END get_email_text()
 
 
-def show_mbox(mboxPath):
-    box = mailbox.mbox(mboxPath)
-    for msg in box:
-        # Extract email text and enclose it in html tags so that
-        # BeautifulSoup will be able to parse it and extract the text
-        email_text = "<html><body>" + get_email_text(msg) + "</body></html>"
-
-        # Parse and remove garbage
-        soup = BeautifulSoup(email_text) 
-        [s.extract() for s in soup('script')] # Remove 'script' elements 
-        [s.extract() for s in soup('style')]  # Remove 'style' elements
-
-        # Get text from the cleaned up XML
-        email_text = get_text_only(soup)
-        email_text = separate_words(email_text)
-
-        print(email_text)   # debugging
-
-        print("")
-        print('**********************************')
-        print("")
-#END show_mbox()
-
-
-
 def parse_emails():
     """ Parse all the emails we have in each file (these are hard-coded),
     given a category for each one. """
 
+    global data_from_parsing
+    
     # Read in stop_words from a file into the stop_words set
     stop_txt_file = open("data/stopwords.list", "r")
     for line in stop_txt_file:
         stop_words.add(line.strip().lower())
     stop_txt_file.close() # We don't need this anymore
 
+    # Read in each mbox file
+    for mbox_file_path, category in MBOX_FILES:
+        box = mailbox.mbox(mbox_file_path)
+        for msg in box:
+            data_from_parsing['docCount'] += 1
+            data_from_parsing['classCount'][category] += 1
 
-    show_mbox('data/Shopping1.mbox')
+            # Extract email text and enclose it in html tags so that
+            # BeautifulSoup will be able to parse it and extract the text
+            email_text = "<html><body>" + get_email_text(msg) + "</body></html>"
+
+            # Parse and remove garbage
+            soup = BeautifulSoup(email_text) 
+            [s.extract() for s in soup('script')] # Remove 'script' elements 
+            [s.extract() for s in soup('style')]  # Remove 'style' elements
+
+            # Get text from the cleaned up XML
+            email_text = get_text_only(soup)
+            email_text = separate_words(email_text)
+
+            # Keep track of the number of unique terms
+            for term in email_text:
+                if term not in data_from_parsing['termCounts']:
+                    data_from_parsing['termCounts'][term] = [ [0,0], [0,0], [0,0], [0,0] ]
+            
+            data_from_parsing['emails'].append( \
+                { \
+                    'terms' : email_text, \
+                    'truthCategory' : category, \
+                    'bernoulliCategory' : -1,
+                    'multinomialCategory' : -1 \
+                } \
+            )
+
+    if debug_mode == True:
+        print("*** Raw email term lists: ")
+        for item in data_from_parsing['emails']:
+            print(item['terms'])
+            print("")
+
+        print("\n*** Terms found: ")
+        for key in sorted(data_from_parsing['termCounts']):
+            print(key)
+
+        print("\n*** Doc count: " + str(data_from_parsing['docCount']))
+
+        print("\n*** Class count: ")
+        for c in data_from_parsing['classCount']:
+            print c
+
+    return data_from_parsing
+#END parse_emails()
 
 if __name__ == '__main__':
+    debug_mode = True
     parse_emails()
