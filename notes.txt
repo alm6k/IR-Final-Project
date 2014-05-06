@@ -8,12 +8,12 @@ as 0's in the email parsing step).
 These are the global variables to be used in our system:
 
 'vocabSize' : 00,
-'classCount' : {
-                 'Social' : 00,
-                 'Shopping' : 00,
-                 'Spam' : 00,
-                 'Other' : 00
-               },
+'classCount' : [
+                 00, // SOCIAL_INDEX
+                 00, // SHOPPING_INDEX
+                 00, // SPAM_INDEX
+                 00  // OTHER_INDEX
+               ],
 'docCount' : 00,
 'termCounts' : {
                  t1 : [
@@ -22,7 +22,7 @@ These are the global variables to be used in our system:
                         [B*, M*], // SOCIAL_INDEX
                         [B*, M*], // SHOPPING_INDEX
                         [B*, M*], // SPAM_INDEX
-                        [B*, M*], // OTHER_INDEX
+                        [B*, M*]  // OTHER_INDEX
                       ]
                  t2 : [ ... ],
                  ...
