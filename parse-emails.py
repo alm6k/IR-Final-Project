@@ -160,7 +160,7 @@ def get_email_text(msg):
             handle_error("UnicodeDecodeError: encountered.",msg,charset)
         except AttributeError as e:
             handle_error("AttributeError: encountered" ,msg,charset)
-    return body
+    return msg['subject'] + " " + body
 #END get_email_text()
 
 
