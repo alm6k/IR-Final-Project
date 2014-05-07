@@ -5,7 +5,7 @@ import os
 # code for the Multinomial Naive Bayes classifier
 # remember to make it a method (call it 'classify' or something?) that can be called when this module is imported into the evaluation file
 
-def train_multinomial(master_dict, emails):
+def train(master_dict, emails):
     # Initialize all counts to 0, as this function could be called more
     # than once, and should count up from 0
     for t in master_dict['termCounts']
@@ -22,7 +22,7 @@ def train_multinomial(master_dict, emails):
 #END train_multinomial()
 
 
-def classify_multinomial(master_dict, emails):
+def classify(master_dict, emails):
     #TODO: write this
     pass
 
