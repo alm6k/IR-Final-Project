@@ -9,7 +9,8 @@ from math import *
 def train(master_dict, emails):
     # reset the counts
     for t in master_dict['termCounts']:
-        master_dict['termCounts'][t] = [[0,0],[0,0],[0,0],[0,0]]
+        for derp in xrange(4):
+            master_dict['termCounts'][t][derp][0] = 0
 
     # cycle through the terms list in each email
     for e in emails:
