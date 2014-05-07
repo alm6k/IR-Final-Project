@@ -49,7 +49,13 @@ def classify(master_dict, email):
     # Only once should you need to determine the number of terms (including
     # repeats) per category - you can reuse this for each call to classify()
     if num_terms_in_category is None:
-        num_terms_in_category = [0,0,0,0]
+        # Start as list of 0's, one entry for each category
+        num_terms_in_category = []
+        for i in range(len(master_dict['classCount'])):
+            num_terms_in_category.append(0)
+            
+        # For each email, add the number of terms it contains to the
+        # appropriate entry in num_terms_in_category
         for email in master_dict['emails']:
             num_terms_in_category[email['truthCategory']] += len(email['terms'])
 
