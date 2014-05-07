@@ -9,7 +9,8 @@ def train(master_dict, emails):
     # Initialize all counts to 0, as this function could be called more
     # than once, and should count up from 0
     for t in master_dict['termCounts']
-        master_dict['termCounts'][t] = [ [0,0], [0,0], [0,0], [0,0] ]
+        for derp in xrange(4):
+            master_dict['termCounts'][t][derp][1] = 0
 
     for e in emails:
         # save the index where the count gets added
