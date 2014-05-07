@@ -24,16 +24,16 @@ def classify_bernoulli(masterDict, email):
     # initialize the classification result with prior probabilities for each classification
     # which, for bernoulli, is the number of documents with each classification divided
     # by the total number of documents
-    probs = [log(c/masterDict['docCount']) for c in masterDict['classCount']]
+    probs = [log(1.0*c/masterDict['docCount']) if c else 0 for c in masterDict['classCount']]
     print probs
 
     # add up the conditional probabilities
     for term, counts in masterDict['termCounts'].iteritems():
         print term
-        for i in counts:
+        for i in range(len(counts)):
             # use index 0 since we're doing bernoulli
             # compute the conditional probability for this term
-            val = log((counts[i][0] + 1) / (masterDict['classCount'][i] + 2))
+            val = log((1.0*counts[i][0] + 1) / (masterDict['classCount'][i] + 2))
             print val
 
             # add the probability based on whether the term occurs in the email
@@ -42,6 +42,7 @@ def classify_bernoulli(masterDict, email):
             else:
                 probs[i] += (1 - val)
 
+    print probs
     # the classification is the index of the largest probability in the list
     # the enumerate will assign indices to the values, and the max function
     # will find the tuple with the maximum value
