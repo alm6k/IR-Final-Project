@@ -1,0 +1,101 @@
+# emails per class: [25, 25, 25, 25]
+Vocabulary size: 6133
+
+[1;32m----- TEST GROUP 1 -----[0m
+  truth: [3, 3, 3, 1, 1, 0, 0, 0, 2, 2]
+b-class: [2, 3, 3, 2, 1, 0, 0, 0, 2, 2]
+m-class: [2, 3, 3, 1, 1, 0, 0, 0, 2, 3]
+[1;33mBern[0m accuracy: 0.8000
+[1;31mMult[0m accuracy: 0.8000
+[1;33mBern[0m RI score: 0.8222
+[1;31mMult[0m RI score: 0.8667
+
+[1;32m----- TEST GROUP 2 -----[0m
+  truth: [3, 3, 3, 1, 1, 0, 0, 0, 2, 2]
+b-class: [2, 3, 3, 1, 1, 0, 0, 0, 2, 2]
+m-class: [3, 3, 3, 1, 1, 0, 0, 0, 2, 2]
+[1;33mBern[0m accuracy: 0.9000
+[1;31mMult[0m accuracy: 1.0000
+[1;33mBern[0m RI score: 0.9111
+[1;31mMult[0m RI score: 1.0000
+
+[1;32m----- TEST GROUP 3 -----[0m
+  truth: [3, 3, 3, 1, 1, 0, 0, 0, 2, 2]
+b-class: [2, 2, 3, 1, 1, 0, 0, 0, 2, 2]
+m-class: [3, 3, 3, 1, 1, 0, 0, 0, 1, 1]
+[1;33mBern[0m accuracy: 0.8000
+[1;31mMult[0m accuracy: 0.8000
+[1;33mBern[0m RI score: 0.8667
+[1;31mMult[0m RI score: 0.9111
+
+[1;32m----- TEST GROUP 4 -----[0m
+  truth: [3, 3, 3, 1, 1, 0, 0, 0, 2, 2]
+b-class: [2, 3, 3, 2, 1, 0, 0, 0, 2, 2]
+m-class: [3, 3, 3, 1, 1, 0, 0, 0, 2, 0]
+[1;33mBern[0m accuracy: 0.8000
+[1;31mMult[0m accuracy: 0.9000
+[1;33mBern[0m RI score: 0.8222
+[1;31mMult[0m RI score: 0.9111
+
+[1;32m----- TEST GROUP 5 -----[0m
+  truth: [3, 3, 3, 1, 1, 0, 0, 0, 2, 2]
+b-class: [2, 3, 2, 1, 1, 0, 0, 2, 2, 2]
+m-class: [3, 3, 3, 1, 1, 0, 0, 0, 2, 2]
+[1;33mBern[0m accuracy: 0.7000
+[1;31mMult[0m accuracy: 1.0000
+[1;33mBern[0m RI score: 0.7333
+[1;31mMult[0m RI score: 1.0000
+
+[1;32m----- TEST GROUP 6 -----[0m
+  truth: [3, 3, 1, 1, 1, 0, 0, 2, 2, 2]
+b-class: [2, 3, 1, 1, 1, 0, 0, 2, 2, 2]
+m-class: [3, 3, 1, 1, 1, 0, 0, 1, 2, 2]
+[1;33mBern[0m accuracy: 0.9000
+[1;31mMult[0m accuracy: 0.9000
+[1;33mBern[0m RI score: 0.9111
+[1;31mMult[0m RI score: 0.8889
+
+[1;32m----- TEST GROUP 7 -----[0m
+  truth: [3, 3, 1, 1, 1, 0, 0, 2, 2, 2]
+b-class: [2, 3, 1, 1, 1, 0, 0, 2, 2, 2]
+m-class: [3, 3, 1, 1, 1, 0, 0, 1, 1, 2]
+[1;33mBern[0m accuracy: 0.9000
+[1;31mMult[0m accuracy: 0.8000
+[1;33mBern[0m RI score: 0.9111
+[1;31mMult[0m RI score: 0.8222
+
+[1;32m----- TEST GROUP 8 -----[0m
+  truth: [3, 3, 1, 1, 1, 0, 0, 2, 2, 2]
+b-class: [2, 3, 1, 0, 1, 0, 0, 2, 2, 2]
+m-class: [3, 3, 1, 1, 1, 0, 0, 1, 2, 2]
+[1;33mBern[0m accuracy: 0.8000
+[1;31mMult[0m accuracy: 0.9000
+[1;33mBern[0m RI score: 0.8222
+[1;31mMult[0m RI score: 0.8889
+
+[1;32m----- TEST GROUP 9 -----[0m
+  truth: [3, 3, 1, 1, 1, 0, 0, 2, 2, 2]
+b-class: [2, 3, 1, 1, 1, 0, 0, 2, 2, 2]
+m-class: [3, 3, 1, 1, 1, 0, 0, 2, 2, 2]
+[1;33mBern[0m accuracy: 0.9000
+[1;31mMult[0m accuracy: 1.0000
+[1;33mBern[0m RI score: 0.9111
+[1;31mMult[0m RI score: 1.0000
+
+[1;32m----- TEST GROUP 10 -----[0m
+  truth: [3, 3, 1, 1, 1, 0, 0, 2, 2, 2]
+b-class: [2, 3, 1, 1, 1, 0, 0, 2, 2, 2]
+m-class: [3, 3, 1, 1, 1, 0, 0, 2, 0, 1]
+[1;33mBern[0m accuracy: 0.9000
+[1;31mMult[0m accuracy: 0.8000
+[1;33mBern[0m RI score: 0.9111
+[1;31mMult[0m RI score: 0.8222
+
+
+[1;35m*** Results ***[0m
+-----
+Mean [1;33mBern[0m Accuracy:   0.8400
+Mean [1;31mMult[0m Accuracy:   0.8900
+-----
+Mean [1;33mBern[0m Rand Index: 0.8622
+Mean [1;31mMult[0m Rand Index: 0.9111
