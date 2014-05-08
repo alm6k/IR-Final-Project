@@ -70,6 +70,7 @@ def classify(master_dict, email):
     # Calculate probabilities of the email being in each category
     probs = copy.deepcopy(priors)
     for i_cat in range(len(master_dict['classCount'])):
+        #for term in frozenset(email['terms']):
         for term in email['terms']:
             probs[i_cat] += log((master_dict['termCounts'][term][i_cat][1] + 1.0) / (num_terms_in_category[i_cat] + vocab_size))
    
