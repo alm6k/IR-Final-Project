@@ -49,7 +49,6 @@ def classify(master_dict, email):
             else:
                 probs[i] += log(1 - val)
 
-    print probs
     # the classification is the index of the largest probability in the list
     # the enumerate will assign indices to the values, and the max function
     # will find the tuple with the maximum value (and its index will be returned)

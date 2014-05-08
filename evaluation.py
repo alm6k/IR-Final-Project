@@ -7,7 +7,7 @@
 
 import parse as p
 import bernoulli as b
-#import multinomial as m
+import multinomial as m
 import pprint
 import itertools as it
 import math
@@ -17,6 +17,8 @@ pp = pprint.PrettyPrinter(indent=4)
 
 # parse the emails
 master_dict = p.parse_emails()
+
+print master_dict['classCount']
 
 # average successful classification rate for the ten-fold CV
 bernAvg = 0.0
@@ -46,22 +48,22 @@ for i in xrange(len(groups)):
 
     # train with the training group
     b.train(master_dict, trainGroup)
-    #m.train(master_dict, trainGroup)
+    m.train(master_dict, trainGroup)
 
     print "\n-----"
     # classify each item in the test group
     for item in testGroup:
         testBClass.append(b.classify(master_dict, item))
-        #testMClass.append(m.classify(master_dict, item))
+        testMClass.append(m.classify(master_dict, item))
 
     # debug print resulting classifications
     print "  truth:", testTruths
     print "b-class:", testBClass
-    #print "m-class:", testMClass
+    print "m-class:", testMClass
 
     # compute the score for this iteration
-    bernAvg += 1.0*sum([x[0] == x[1] for x in zip(testTruths, testBClass)]) / testSize
-    #multAvg += 1.0*sum([x[0] == x[1] for x in zip(testTruths, testMClass)]) / testSize
+    bernAvg += 1.0*sum([x[0] == x[1] for x in it.izip(testTruths, testBClass)]) / testSize
+    multAvg += 1.0*sum([x[0] == x[1] for x in it.izip(testTruths, testMClass)]) / testSize
 
     """
     RI = (A + D) / (A + B + C + D)
@@ -94,7 +96,6 @@ for i in xrange(len(groups)):
     except:
         pass
 
-    """
     # repeat for the multinomial classifier
     A = B = C = D = 0
     for x in it.izip(it.combinations(testTruths, 2), it.combinations(testMClass, 2)):
@@ -118,7 +119,6 @@ for i in xrange(len(groups)):
         multRandAvg += 1.0*(A+D)/(A+B+C+D)
     except:
         pass
-    """
 
 
 # print the results
