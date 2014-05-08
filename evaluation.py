@@ -44,7 +44,7 @@ for i in xrange(len(groups)):
 
     # training group is all the other groups
     # flattened into one list
-    trainGroup = it.chain.from_iterable(groups[0:i] + groups[i+1:10])
+    trainGroup = list(it.chain.from_iterable(groups[0:i] + groups[i+1:10]))
 
     # train with the training group
     b.train(master_dict, trainGroup)
